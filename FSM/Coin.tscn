@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://bri8ywh7p33ku"]
+
+[ext_resource type="Script" path="res://Coin.gd" id="1_14upx"]
+[ext_resource type="Texture2D" uid="uid://bcqbs4r0p56hj" path="res://empanada.png" id="2_ffgfu"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_vfl5f"]
+height = 20.0
+
+[node name="Coin" type="StaticBody2D"]
+collision_layer = 19
+script = ExtResource("1_14upx")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("2_ffgfu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_vfl5f")

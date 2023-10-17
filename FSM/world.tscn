@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3 uid="uid://db2ojrv3djtpe"]
+
+[ext_resource type="Script" path="res://GameManager.gd" id="1_5kcm8"]
+[ext_resource type="Texture2D" uid="uid://4f53opkqns45" path="res://grass_bass.png" id="1_njj2l"]
+[ext_resource type="PackedScene" uid="uid://dly8bfnidn0iw" path="res://business_goblin.tscn" id="2_5tql4"]
+[ext_resource type="PackedScene" uid="uid://ckotp834mux2f" path="res://block_tile_map.tscn" id="3_riu2l"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_wiaox"]
+vertices = PackedVector2Array(19, 93, 19, 19, 68.4211, 21.0526, 70.5263, 69.4737, 99, 93, 101.053, 71.5789, 101, 19, 204, 20, 203.158, 135.789, 100, 121.053, 236.842, 18.9474, 305.263, 18.9474, 305.263, 160, 235.789, 138.947, 19, 158, 18.9474, 122.105)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(4, 0, 3, 5), PackedInt32Array(5, 6, 7, 8), PackedInt32Array(4, 5, 8, 9), PackedInt32Array(10, 11, 12, 13), PackedInt32Array(13, 12, 14, 8), PackedInt32Array(9, 8, 14, 15)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(19, 19, 68.4211, 21.0526, 70.5263, 69.4737, 101.053, 71.5789, 101, 19, 204, 20, 203.158, 135.789, 235.789, 138.947, 236.842, 18.9474, 305.263, 18.9474, 305.263, 160, 19, 158, 18.9474, 122.105, 100, 121.053, 99, 93, 19, 93)])
+
+[node name="World" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_5kcm8")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(320, 180)
+offset_right = 320.0
+offset_bottom = 192.0
+texture = ExtResource("1_njj2l")
+stretch_mode = 1
+
+[node name="BusinessGoblin" parent="." instance=ExtResource("2_5tql4")]
+position = Vector2(189, 94)
+
+[node name="BlockTileMap" parent="." instance=ExtResource("3_riu2l")]
+layer_0/tile_data = PackedInt32Array(0, 0, 0, 65536, 0, 0, 131072, 0, 0, 196608, 0, 0, 262144, 0, 0, 327680, 0, 0, 393216, 0, 0, 458752, 0, 0, 524288, 0, 0, 589824, 0, 0, 655360, 0, 0, 655361, 0, 0, 655362, 0, 0, 655363, 0, 0, 655364, 0, 0, 655365, 0, 0, 655366, 0, 0, 655367, 0, 0, 655368, 0, 0, 655369, 0, 0, 655370, 0, 0, 655371, 0, 0, 655372, 0, 0, 655373, 0, 0, 655374, 0, 0, 655375, 0, 0, 655376, 0, 0, 655377, 0, 0, 655378, 0, 0, 655379, 0, 0, 589843, 0, 0, 524307, 0, 0, 458771, 0, 0, 327699, 0, 0, 262163, 0, 0, 196627, 0, 0, 131091, 0, 0, 65555, 0, 0, 18, 0, 0, 19, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 5, 0, 0, 6, 0, 0, 7, 0, 0, 8, 0, 0, 9, 0, 0, 10, 0, 0, 11, 0, 0, 12, 0, 0, 13, 0, 0, 14, 0, 0, 15, 0, 0, 16, 0, 0, 17, 0, 0, 393235, 0, 0, 393217, 0, 0, 393218, 0, 0, 393219, 0, 0, 393220, 0, 0, 393221, 0, 0, 196613, 0, 0, 65541, 0, 0, 131077, 0, 0, 65549, 0, 0, 131085, 0, 0, 196621, 0, 0, 262157, 0, 0, 327693, 0, 0, 393229, 0, 0, 458765, 0, 0, 262152, 0, 0, 262153, 0, 0, 262154, 0, 0, 720896, 0, 0, 720897, 0, 0, 720898, 0, 0, 720899, 0, 0, 720900, 0, 0, 720901, 0, 0, 720902, 0, 0, 720903, 0, 0, 720904, 0, 0, 720905, 0, 0, 720906, 0, 0, 720907, 0, 0, 720908, 0, 0, 720909, 0, 0, 720910, 0, 0, 720911, 0, 0, 720912, 0, 0, 720913, 0, 0, 720914, 0, 0, 720915, 0, 0)
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+position = Vector2(7, 3)
+scale = Vector2(0.95, 0.95)
+navigation_polygon = SubResource("NavigationPolygon_wiaox")
+
+[node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="."]
+radius = 153.85
+vertices = PackedVector2Array(127, 62, 176, 63, 177, 79, 127, 80)

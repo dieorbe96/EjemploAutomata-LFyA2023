@@ -1,0 +1,149 @@
+[gd_scene load_steps=17 format=3 uid="uid://dly8bfnidn0iw"]
+
+[ext_resource type="Texture2D" uid="uid://dfuxpogk8v43e" path="res://business_gobliman.png" id="1_e8yaw"]
+[ext_resource type="Script" path="res://business_goblin.gd" id="1_hrd8v"]
+[ext_resource type="Texture2D" uid="uid://c4j8l4dcs4tju" path="res://shadow.png" id="2_y0vw3"]
+[ext_resource type="Script" path="res://FiniteStateMachine.gd" id="4_ipovr"]
+[ext_resource type="Script" path="res://enemy_wander_state.gd" id="5_e3414"]
+[ext_resource type="Script" path="res://enemy_chase_state.gd" id="6_ou57f"]
+[ext_resource type="Script" path="res://enemy_collect_scene.gd" id="7_cdbiy"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bvdyw"]
+atlas = ExtResource("1_e8yaw")
+region = Rect2(0, 0, 18, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n3o3v"]
+atlas = ExtResource("1_e8yaw")
+region = Rect2(18, 0, 18, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1u4wh"]
+atlas = ExtResource("1_e8yaw")
+region = Rect2(36, 0, 18, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fx7om"]
+atlas = ExtResource("1_e8yaw")
+region = Rect2(54, 0, 18, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qb80a"]
+atlas = ExtResource("1_e8yaw")
+region = Rect2(72, 0, 18, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6uds0"]
+atlas = ExtResource("1_e8yaw")
+region = Rect2(90, 0, 18, 17)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tt0s6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bvdyw")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bvdyw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n3o3v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1u4wh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fx7om")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qb80a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6uds0")
+}],
+"loop": true,
+"name": &"move",
+"speed": 8.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_enp64"]
+radius = 12.0416
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wf2n0"]
+radius = 57.0789
+
+[node name="BusinessGoblin" type="CharacterBody2D"]
+script = ExtResource("1_hrd8v")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_tt0s6")
+animation = &"idle"
+autoplay = "idle"
+offset = Vector2(1, -1)
+
+[node name="ShadowSprite2D" type="Sprite2D" parent="."]
+self_modulate = Color(1, 1, 1, 0.392157)
+show_behind_parent = true
+position = Vector2(0, 6)
+scale = Vector2(0.8, 1)
+texture = ExtResource("2_y0vw3")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2(0.0999994, 0.9)
+scale = Vector2(1.02083, 1.85417)
+polygon = PackedVector2Array(-0.0979594, -5.33932, 6.75921, -3.72134, 4.80002, 0.0539324, -0.0979594, 3.82921, -4.99593, 0.0539324, -6.95512, -3.72134)
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+avoidance_enabled = true
+radius = 35.64
+debug_enabled = true
+
+[node name="FiniteStateMachine" type="Node" parent="." node_paths=PackedStringArray("state")]
+script = ExtResource("4_ipovr")
+state = NodePath("EnemyWanderState")
+
+[node name="EnemyWanderState" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("actor", "animator", "vision_cast", "coin_vision_area")]
+script = ExtResource("5_e3414")
+actor = NodePath("../..")
+animator = NodePath("../../AnimatedSprite2D")
+vision_cast = NodePath("../../MouseCast")
+coin_vision_area = NodePath("../../VisionArea")
+
+[node name="EnemyChaseState" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("actor", "animator", "vision_cast", "coin_vision_area")]
+script = ExtResource("6_ou57f")
+actor = NodePath("../..")
+animator = NodePath("../../AnimatedSprite2D")
+vision_cast = NodePath("../../MouseCast")
+coin_vision_area = NodePath("../../VisionArea")
+
+[node name="EnemyCollectState" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("actor", "animator", "mouse_cast", "nav_agent", "vision_area")]
+script = ExtResource("7_cdbiy")
+actor = NodePath("../..")
+animator = NodePath("../../AnimatedSprite2D")
+mouse_cast = NodePath("../../MouseCast")
+nav_agent = NodePath("../../NavigationAgent2D")
+vision_area = NodePath("../../VisionArea")
+
+[node name="MouseCast" type="RayCast2D" parent="."]
+position = Vector2(0, -9)
+target_position = Vector2(0, 15)
+
+[node name="PickupArea" type="Area2D" parent="."]
+position = Vector2(0, 5)
+collision_layer = 16
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickupArea"]
+position = Vector2(0, -5)
+shape = SubResource("CircleShape2D_enp64")
+
+[node name="VisionArea" type="Area2D" parent="."]
+position = Vector2(0, 5)
+collision_layer = 16
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="VisionArea"]
+shape = SubResource("CircleShape2D_wf2n0")
+
+[connection signal="body_entered" from="PickupArea" to="FiniteStateMachine/EnemyCollectState" method="_on_pickup_area_body_entered"]
+[connection signal="body_entered" from="VisionArea" to="FiniteStateMachine/EnemyWanderState" method="_on_vision_area_body_entered"]
